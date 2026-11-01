@@ -1,0 +1,25 @@
+Two measures of line spacing, 162 pages with both: Spearman +0.76, median absolute difference 2.3 px
+== line spacing from word outlines
+Scribe 1: median line spacing 79.6 px over 87 pages
+Scribe 2: median line spacing 63.2 px over 39 pages
+Scribe 3: median line spacing 64.6 px over 24 pages
+Scribe 1 herbal: 92 pages, 1008 k; k height median 68.0; w/h 0.656; line spacing median 79.7 px over 82 pages
+Scribe 1 pharma: 9 pages, 204 k; k height median 66.0; w/h 0.685; line spacing median 76.9 px over 5 pages
+Scribe 1: Spearman(line spacing, page median k height) = +0.51, p = 0.000, 81 pages
+Scribe 2: Spearman(line spacing, page median k height) = +0.46, p = 0.003, 39 pages
+Scribe 3: Spearman(line spacing, page median k height) = +0.67, p = 0.000, 23 pages
+k height px: Scribe 1 term at equal spacing +2.338 [95% -0.463, +5.939], slope +0.529 per px; 143 pages, 46 sheets
+k width/height: Scribe 1 term at equal spacing -0.036 [95% -0.068, -0.006], slope -0.002 per px; 143 pages, 46 sheets
+spacing ranges: Scribe 1 67-92 (n=81), Scribes 2-3 55-81 (n=62); Scribe 1 pages under 72 px: 7; B pages over 72 px: 3
+== line spacing from k bottoms
+Scribe 1: median line spacing 80.0 px over 64 pages
+Scribe 2: median line spacing 61.8 px over 26 pages
+Scribe 3: median line spacing 65.0 px over 17 pages
+Scribe 1 herbal: 92 pages, 1008 k; k height median 68.0; w/h 0.656; line spacing median 79.0 px over 81 pages
+Scribe 1 pharma: 9 pages, 204 k; k height median 66.0; w/h 0.685; line spacing median 76.8 px over 5 pages
+Scribe 1: Spearman(line spacing, page median k height) = +0.43, p = 0.000, 81 pages
+Scribe 2: Spearman(line spacing, page median k height) = +0.50, p = 0.001, 39 pages
+Scribe 3: Spearman(line spacing, page median k height) = +0.57, p = 0.005, 23 pages
+k height px: Scribe 1 term at equal spacing +4.588 [95% +2.158, +7.984], slope +0.389 per px; 143 pages, 46 sheets
+k width/height: Scribe 1 term at equal spacing -0.041 [95% -0.066, -0.019], slope -0.002 per px; 143 pages, 46 sheets
+spacing ranges: Scribe 1 58-96 (n=81), Scribes 2-3 54-93 (n=62); Scribe 1 pages under 72 px: 12; B pages over 72 px: 2

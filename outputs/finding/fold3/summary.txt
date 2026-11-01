@@ -1,0 +1,8 @@
+Fold 3: 33 held-out pages, 69 Timm k on them, 68 with their centre in a k-word
+Timm k found at IoU >= 0.5: 67 of 69; IoU >= 0.75: 60
+Without the at-most-EVA-count rule: IoU >= 0.5 67, >= 0.75 60
+Same, detection moved onto Timm's centre: IoU >= 0.5 67, >= 0.75 63
+Median IoU of found: 0.818
+Held-out k-words: 1565; detections above 0.5 equal to EVA count: 1452, fewer: 102, more: 11
+Detections above 0.5 kept (at most EVA count per word): 1477
+Run time: 642 s

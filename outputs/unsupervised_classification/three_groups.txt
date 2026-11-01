@@ -1,0 +1,18 @@
+letters (6183)
+k-means: agreement with Davis 0.008, with Currier A/B -0.005
+  group 0 (1589): Scribe 1 189 (12%), Scribe 2 779 (49%), Scribe 3 621 (39%)
+  group 1 (2239): Scribe 1 512 (23%), Scribe 2 668 (30%), Scribe 3 1059 (47%)
+  group 2 (2355): Scribe 1 537 (23%), Scribe 2 865 (37%), Scribe 3 953 (40%)
+Ward: agreement with Davis 0.000, with Currier A/B -0.003
+  group 1 (863): Scribe 1 114 (13%), Scribe 2 382 (44%), Scribe 3 367 (43%)
+  group 2 (2098): Scribe 1 497 (24%), Scribe 2 740 (35%), Scribe 3 861 (41%)
+  group 3 (3222): Scribe 1 627 (19%), Scribe 2 1190 (37%), Scribe 3 1405 (44%)
+page-hand units (176)
+k-means: agreement with Davis 0.326, with Currier A/B 0.436
+  group 0 (91): Scribe 1 81 (89%), Scribe 2 2 (2%), Scribe 3 8 (9%)
+  group 1 (84): Scribe 1 23 (27%), Scribe 2 41 (49%), Scribe 3 20 (24%)
+  group 2 (1): Scribe 1 0 (0%), Scribe 2 0 (0%), Scribe 3 1 (100%)
+Ward: agreement with Davis 0.303, with Currier A/B 0.292
+  group 1 (62): Scribe 1 55 (89%), Scribe 2 0 (0%), Scribe 3 7 (11%)
+  group 2 (62): Scribe 1 45 (73%), Scribe 2 5 (8%), Scribe 3 12 (19%)
+  group 3 (52): Scribe 1 4 (8%), Scribe 2 38 (73%), Scribe 3 10 (19%)

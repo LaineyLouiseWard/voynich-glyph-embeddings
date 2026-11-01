@@ -1,0 +1,11 @@
+Folds done: [0, 1, 2, 3, 4]; held-out pages: 166 of 166 kept pages
+
+1. Timm's 432 k: 357 are on held-out pages. Found at IoU >= 0.5: 340; at IoU >= 0.75: 305.
+
+2. Per Davis scribe, held-out pages: k found / k in the word-box transcription
+   Scribe 1: 1435 / 1538
+   Scribe 2: 2558 / 2699
+   Scribe 3: 2733 / 2859
+   Scribe 4: 25 / 159
+   Scribe 5: 263 / 286
+   All: 7014 / 7541

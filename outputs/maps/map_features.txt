@@ -1,0 +1,6 @@
+PC 1 vs height (px): all +0.35; within Scribe 1 +0.24, Scribe 2 +0.20, Scribe 3 +0.38
+PC 1 vs width / height: all -0.23; within Scribe 1 -0.07, Scribe 2 -0.13, Scribe 3 -0.24
+PC 1 vs ink share: all -0.15; within Scribe 1 -0.15, Scribe 2 -0.17, Scribe 3 -0.16
+PC 2 vs height (px): all +0.14; within Scribe 1 +0.11, Scribe 2 +0.09, Scribe 3 +0.07
+PC 2 vs width / height: all -0.24; within Scribe 1 -0.27, Scribe 2 -0.19, Scribe 3 -0.18
+PC 2 vs ink share: all -0.14; within Scribe 1 -0.24, Scribe 2 -0.10, Scribe 3 -0.15

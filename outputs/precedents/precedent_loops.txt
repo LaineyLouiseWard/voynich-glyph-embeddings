@@ -1,0 +1,15 @@
+loop roundness: Scribe 1 - Scribe 2 = +0.049 [95% +0.032, +0.077]; sheets 28 and 11
+loop roundness: Scribe 1 - Scribe 3 = +0.032 [95% +0.017, +0.071]; sheets 28 and 8
+loop roundness: Scribe 3 - Scribe 2 = +0.017 [95% -0.013, +0.037]; sheets 8 and 11
+loop area/h^2: Scribe 1 - Scribe 2 = +0.012 [95% +0.009, +0.015]; sheets 28 and 11
+loop area/h^2: Scribe 1 - Scribe 3 = +0.008 [95% +0.002, +0.012]; sheets 28 and 8
+loop area/h^2: Scribe 3 - Scribe 2 = +0.004 [95% +0.000, +0.009]; sheets 8 and 11
+loop area/h^2: Scribe 4 - Scribe 1 = -0.007 [95% -0.021, -0.001]; sheets 4 and 28
+loop area/h^2: Scribe 4 - Scribe 2 = +0.005 [95% -0.008, +0.010]; sheets 4 and 11
+loop area/h^2: Scribe 4 - Scribe 3 = +0.001 [95% -0.013, +0.007]; sheets 4 and 8
+height: Scribe 5 - Scribe 1 = -12.750 [95% -17.000, -3.000]; sheets 2 and 28
+height: Scribe 5 - Scribe 2 = -0.750 [95% -5.000, +9.000]; sheets 2 and 11
+height: Scribe 5 - Scribe 3 = -1.500 [95% -7.000, +9.000]; sheets 2 and 8
+w/h: Scribe 5 - Scribe 1 = +0.069 [95% +0.053, +0.091]; sheets 2 and 28
+w/h: Scribe 5 - Scribe 2 = -0.016 [95% -0.032, -0.004]; sheets 2 and 11
+w/h: Scribe 5 - Scribe 3 = +0.016 [95% -0.024, +0.031]; sheets 2 and 8

@@ -1,0 +1,2 @@
+PCA of page means: Scribe 1 vs Scribes 2-3 from map position alone, held out by sheet: balanced accuracy 0.56
+Isomap, 10 neighbours: Scribe 1 vs Scribes 2-3 from map position alone, held out by sheet: balanced accuracy 0.52

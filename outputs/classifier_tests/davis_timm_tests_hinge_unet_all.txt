@@ -1,0 +1,5 @@
+hinge_unet_all: 7094 letters (2 left out, nothing to measure), 708 flagged faint
+[all] text type fixed, Scribe 2 (n=2568) vs Scribe 3 (n=2543), type-B pages: balanced accuracy 0.500, 95% interval [0.406, 0.601]; shuffled 0.485 [0.403, 0.577]; p=0.373; Scribe 2 right 0.54, Scribe 3 right 0.46
+[all] crossbar or text type, classifier trained on Scribes 1 and 2: held-out Scribe 1 called 1: 0.82 (n=1472); held-out Scribe 2 called 1: 0.16 (n=2568); Scribe 3 called 1: 0.28 (n=2745); Scribe 4 called 1: 0.53 (n=47); Scribe 5 called 1: 0.53 (n=262)
+[without faint] text type fixed, Scribe 2 (n=2312) vs Scribe 3 (n=2443), type-B pages: balanced accuracy 0.513, 95% interval [0.418, 0.615]; shuffled 0.485 [0.408, 0.569]; p=0.274; Scribe 2 right 0.56, Scribe 3 right 0.47
+[without faint] crossbar or text type, classifier trained on Scribes 1 and 2: held-out Scribe 1 called 1: 0.83 (n=1238); held-out Scribe 2 called 1: 0.16 (n=2312); Scribe 3 called 1: 0.30 (n=2633); Scribe 4 called 1: 0.45 (n=22); Scribe 5 called 1: 0.56 (n=181)

@@ -1,0 +1,5 @@
+dinov3_unet_all: 7096 letters, 710 flagged faint
+[all] text type fixed, Scribe 2 (n=2568) vs Scribe 3 (n=2543), type-B pages: balanced accuracy 0.580, 95% interval [0.430, 0.671]; shuffled 0.491 [0.385, 0.597]; p=0.055; Scribe 2 right 0.55, Scribe 3 right 0.60
+[all] crossbar or text type, classifier trained on Scribes 1 and 2: held-out Scribe 1 called 1: 0.83 (n=1473); held-out Scribe 2 called 1: 0.14 (n=2568); Scribe 3 called 1: 0.33 (n=2745); Scribe 4 called 1: 0.60 (n=47); Scribe 5 called 1: 0.36 (n=263)
+[without faint] text type fixed, Scribe 2 (n=2312) vs Scribe 3 (n=2443), type-B pages: balanced accuracy 0.568, 95% interval [0.425, 0.658]; shuffled 0.489 [0.381, 0.582]; p=0.055; Scribe 2 right 0.55, Scribe 3 right 0.58
+[without faint] crossbar or text type, classifier trained on Scribes 1 and 2: held-out Scribe 1 called 1: 0.83 (n=1238); held-out Scribe 2 called 1: 0.14 (n=2312); Scribe 3 called 1: 0.36 (n=2633); Scribe 4 called 1: 0.59 (n=22); Scribe 5 called 1: 0.37 (n=181)

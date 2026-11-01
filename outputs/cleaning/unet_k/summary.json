@@ -1,0 +1,61 @@
+{
+  "folds": [
+    {
+      "fold": 0,
+      "train_letters": 339,
+      "train_easy": 166,
+      "target_iou": 0.9821210503578186,
+      "k_ink_lost": 0.012895844876766205,
+      "other_ink_called_k": 0.019460827112197876
+    },
+    {
+      "fold": 1,
+      "train_letters": 339,
+      "train_easy": 174,
+      "target_iou": 0.9801921844482422,
+      "k_ink_lost": 0.008006567135453224,
+      "other_ink_called_k": 0.036663610488176346
+    },
+    {
+      "fold": 2,
+      "train_letters": 341,
+      "train_easy": 184,
+      "target_iou": 0.9825513958930969,
+      "k_ink_lost": 0.008753476664423943,
+      "other_ink_called_k": 0.005680412985384464
+    },
+    {
+      "fold": 3,
+      "train_letters": 340,
+      "train_easy": 170,
+      "target_iou": 0.9882532358169556,
+      "k_ink_lost": 0.003406837349757552,
+      "other_ink_called_k": 0.019258499145507812
+    },
+    {
+      "fold": 4,
+      "train_letters": 341,
+      "train_easy": 178,
+      "target_iou": 0.9911238551139832,
+      "k_ink_lost": 0.006102052982896566,
+      "other_ink_called_k": 0.009176105260848999
+    }
+  ],
+  "settings": {
+    "size": 144,
+    "folds": 5,
+    "composites_per_fold": 6000,
+    "epochs": 12,
+    "batch": 32,
+    "seed": 0,
+    "touch_share": 0.7,
+    "plain_share": 0.2,
+    "class_weights": [
+      0.2,
+      1.0,
+      1.0
+    ],
+    "torch": "2.12.0+cu130",
+    "device": "cuda"
+  }
+}

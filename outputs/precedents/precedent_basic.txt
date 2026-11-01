@@ -1,0 +1,140 @@
+no ink: 103402 5 faint
+== S1: 1238 letters, 104 pages, 28 sheets
+   height: letters 68.000 [IQR 62.000-74.000], n=1238; page medians 68.250 over 104 pages
+   w/h: letters 0.662 [IQR 0.608-0.726], n=1238; page medians 0.656 over 104 pages
+   closed loop share: 0.750 of 1238
+   loop area/h^2: letters 0.039 [IQR 0.030-0.047], n=928; page medians 0.040 over 101 pages
+   loop h/ink h: letters 0.246 [IQR 0.213-0.277], n=928; page medians 0.246 over 101 pages
+   loop roundness: letters 0.665 [IQR 0.585-0.751], n=928; page medians 0.665 over 101 pages
+== S2: 2312 letters, 43 pages, 12 sheets
+   height: letters 56.000 [IQR 52.000-61.000], n=2312; page medians 56.000 over 43 pages
+   w/h: letters 0.745 [IQR 0.679-0.810], n=2312; page medians 0.740 over 43 pages
+   closed loop share: 0.676 of 2312
+   loop area/h^2: letters 0.028 [IQR 0.021-0.037], n=1563; page medians 0.027 over 43 pages
+   loop h/ink h: letters 0.207 [IQR 0.177-0.240], n=1563; page medians 0.204 over 43 pages
+   loop roundness: letters 0.614 [IQR 0.528-0.700], n=1563; page medians 0.617 over 43 pages
+== S3: 2633 letters, 29 pages, 8 sheets
+   height: letters 57.000 [IQR 52.000-63.000], n=2633; page medians 57.000 over 29 pages
+   w/h: letters 0.721 [IQR 0.654-0.788], n=2633; page medians 0.712 over 29 pages
+   closed loop share: 0.818 of 2633
+   loop area/h^2: letters 0.032 [IQR 0.024-0.042], n=2153; page medians 0.032 over 28 pages
+   loop h/ink h: letters 0.215 [IQR 0.184-0.250], n=2153; page medians 0.213 over 28 pages
+   loop roundness: letters 0.626 [IQR 0.543-0.716], n=2153; page medians 0.633 over 28 pages
+== S4: 22 letters, 9 pages, 4 sheets
+   height: letters 62.000 [IQR 59.250-71.750], n=22; page medians 66.500 over 9 pages
+   w/h: letters 0.702 [IQR 0.604-0.767], n=22; page medians 0.704 over 9 pages
+   closed loop share: 0.727 of 22
+   loop area/h^2: letters 0.033 [IQR 0.025-0.042], n=16; page medians 0.033 over 9 pages
+   loop h/ink h: letters 0.216 [IQR 0.190-0.238], n=16; page medians 0.218 over 9 pages
+   loop roundness: letters 0.672 [IQR 0.610-0.689], n=16; page medians 0.638 over 9 pages
+== S5: 181 letters, 7 pages, 2 sheets
+   height: letters 60.000 [IQR 54.000-65.000], n=181; page medians 55.500 over 7 pages
+   w/h: letters 0.712 [IQR 0.657-0.781], n=181; page medians 0.725 over 7 pages
+   closed loop share: 0.519 of 181
+   loop area/h^2: letters 0.034 [IQR 0.024-0.043], n=94; page medians 0.034 over 7 pages
+   loop h/ink h: letters 0.216 [IQR 0.177-0.260], n=94; page medians 0.217 over 7 pages
+   loop roundness: letters 0.682 [IQR 0.564-0.765], n=94; page medians 0.597 over 7 pages
+== S4 all: 47 letters, 16 pages, 7 sheets
+   height: letters 59.000 [IQR 53.500-69.000], n=47; page medians 60.000 over 16 pages
+   w/h: letters 0.704 [IQR 0.543-0.798], n=47; page medians 0.707 over 16 pages
+   closed loop share: 0.660 of 47
+   loop area/h^2: letters 0.039 [IQR 0.031-0.051], n=31; page medians 0.034 over 16 pages
+   loop h/ink h: letters 0.232 [IQR 0.203-0.263], n=31; page medians 0.223 over 16 pages
+   loop roundness: letters 0.635 [IQR 0.592-0.690], n=31; page medians 0.636 over 16 pages
+== S5 all: 262 letters, 7 pages, 2 sheets
+   height: letters 59.000 [IQR 53.000-65.000], n=262; page medians 55.000 over 7 pages
+   w/h: letters 0.710 [IQR 0.637-0.779], n=262; page medians 0.696 over 7 pages
+   closed loop share: 0.427 of 262
+   loop area/h^2: letters 0.033 [IQR 0.023-0.042], n=112; page medians 0.033 over 7 pages
+   loop h/ink h: letters 0.212 [IQR 0.173-0.255], n=112; page medians 0.209 over 7 pages
+   loop roundness: letters 0.667 [IQR 0.570-0.757], n=112; page medians 0.609 over 7 pages
+== S1 herbal: 935 letters, 87 pages, 23 sheets
+   height: letters 68.000 [IQR 63.000-74.000], n=935; page medians 68.500 over 87 pages
+   w/h: letters 0.661 [IQR 0.607-0.721], n=935; page medians 0.662 over 87 pages
+   closed loop share: 0.791 of 935
+   loop area/h^2: letters 0.038 [IQR 0.029-0.046], n=740; page medians 0.039 over 86 pages
+   loop h/ink h: letters 0.243 [IQR 0.210-0.273], n=740; page medians 0.246 over 86 pages
+   loop roundness: letters 0.670 [IQR 0.588-0.761], n=740; page medians 0.671 over 86 pages
+== S1 non-herbal: 303 letters, 17 pages, 5 sheets
+   height: letters 67.000 [IQR 61.000-73.000], n=303; page medians 67.000 over 17 pages
+   w/h: letters 0.672 [IQR 0.610-0.740], n=303; page medians 0.652 over 17 pages
+   closed loop share: 0.620 of 303
+   loop area/h^2: letters 0.042 [IQR 0.035-0.052], n=188; page medians 0.042 over 15 pages
+   loop h/ink h: letters 0.258 [IQR 0.226-0.288], n=188; page medians 0.252 over 15 pages
+   loop roundness: letters 0.651 [IQR 0.579-0.738], n=188; page medians 0.645 over 15 pages
+== S2 herbal: 578 letters, 20 pages, 5 sheets
+   height: letters 59.000 [IQR 54.000-66.000], n=578; page medians 58.250 over 20 pages
+   w/h: letters 0.729 [IQR 0.667-0.802], n=578; page medians 0.735 over 20 pages
+   closed loop share: 0.554 of 578
+   loop area/h^2: letters 0.026 [IQR 0.018-0.034], n=320; page medians 0.026 over 20 pages
+   loop h/ink h: letters 0.196 [IQR 0.160-0.227], n=320; page medians 0.193 over 20 pages
+   loop roundness: letters 0.614 [IQR 0.525-0.710], n=320; page medians 0.620 over 20 pages
+== S2 bathing 75-84: 1663 letters, 19 pages, 5 sheets
+   height: letters 56.000 [IQR 51.000-60.000], n=1663; page medians 56.000 over 19 pages
+   w/h: letters 0.750 [IQR 0.684-0.814], n=1663; page medians 0.742 over 19 pages
+   closed loop share: 0.717 of 1663
+   loop area/h^2: letters 0.029 [IQR 0.021-0.038], n=1193; page medians 0.029 over 19 pages
+   loop h/ink h: letters 0.211 [IQR 0.182-0.244], n=1193; page medians 0.211 over 19 pages
+   loop roundness: letters 0.615 [IQR 0.534-0.697], n=1193; page medians 0.617 over 19 pages
+== S2 other: 71 letters, 4 pages, 2 sheets
+   height: letters 55.000 [IQR 51.000-59.000], n=71; page medians 54.250 over 4 pages
+   w/h: letters 0.724 [IQR 0.669-0.768], n=71; page medians 0.716 over 4 pages
+   closed loop share: 0.704 of 71
+   loop area/h^2: letters 0.029 [IQR 0.023-0.035], n=50; page medians 0.028 over 4 pages
+   loop h/ink h: letters 0.189 [IQR 0.170-0.226], n=50; page medians 0.199 over 4 pages
+   loop roundness: letters 0.606 [IQR 0.509-0.682], n=50; page medians 0.566 over 4 pages
+== S3 herbal: 190 letters, 3 pages, 1 sheets
+   height: letters 59.000 [IQR 54.000-63.000], n=190; page medians 59.500 over 3 pages
+   w/h: letters 0.707 [IQR 0.658-0.775], n=190; page medians 0.706 over 3 pages
+   closed loop share: 0.916 of 190
+   loop area/h^2: letters 0.036 [IQR 0.026-0.045], n=174; page medians 0.036 over 2 pages
+   loop h/ink h: letters 0.236 [IQR 0.203-0.271], n=174; page medians 0.231 over 2 pages
+   loop roundness: letters 0.577 [IQR 0.513-0.655], n=174; page medians 0.575 over 2 pages
+== S3 non-herbal: 2443 letters, 26 pages, 7 sheets
+   height: letters 57.000 [IQR 52.000-63.000], n=2443; page medians 57.000 over 26 pages
+   w/h: letters 0.721 [IQR 0.654-0.789], n=2443; page medians 0.716 over 26 pages
+   closed loop share: 0.810 of 2443
+   loop area/h^2: letters 0.032 [IQR 0.024-0.042], n=1979; page medians 0.031 over 26 pages
+   loop h/ink h: letters 0.213 [IQR 0.183-0.250], n=1979; page medians 0.211 over 26 pages
+   loop roundness: letters 0.632 [IQR 0.546-0.717], n=1979; page medians 0.634 over 26 pages
+== S5 sheet F1: 59 letters, 4 pages, 1 sheets
+   height: letters 51.000 [IQR 47.000-56.000], n=59; page medians 52.000 over 4 pages
+   w/h: letters 0.720 [IQR 0.657-0.783], n=59; page medians 0.727 over 4 pages
+   closed loop share: 0.576 of 59
+   loop area/h^2: letters 0.035 [IQR 0.023-0.049], n=34; page medians 0.036 over 4 pages
+   loop h/ink h: letters 0.228 [IQR 0.173-0.278], n=34; page medians 0.206 over 4 pages
+   loop roundness: letters 0.596 [IQR 0.513-0.685], n=34; page medians 0.595 over 4 pages
+== S5 sheet H1: 122 letters, 3 pages, 1 sheets
+   height: letters 63.500 [IQR 59.000-67.750], n=122; page medians 64.000 over 3 pages
+   w/h: letters 0.711 [IQR 0.657-0.774], n=122; page medians 0.716 over 3 pages
+   closed loop share: 0.492 of 122
+   loop area/h^2: letters 0.032 [IQR 0.024-0.041], n=60; page medians 0.032 over 3 pages
+   loop h/ink h: letters 0.215 [IQR 0.188-0.250], n=60; page medians 0.233 over 3 pages
+   loop roundness: letters 0.701 [IQR 0.622-0.788], n=60; page medians 0.681 over 3 pages
+S1 non-herbal pages: 87r 87v 88r 89v2 90v1 90v2 93r 93v 96r 99r 99v 100r 100v 101v 101v2 102v1 102v2
+== spacing from aligned Voynichese word boxes (median of page values [IQR], pages)
+   S1 pitch: 79.575 [IQR 76.012-82.812], n=89
+   S1 word gap: 29.800 [IQR 25.300-32.600], n=89
+   S1 word-box height: 73.650 [IQR 69.950-77.700], n=89
+   S1 pitch / word-box height: 1.068 [IQR 1.029-1.129], n=89
+   S1 word gap / word-box height: 0.407 [IQR 0.344-0.467], n=89
+   S2 pitch: 63.250 [IQR 59.988-65.538], n=39
+   S2 word gap: 27.700 [IQR 27.100-31.500], n=39
+   S2 word-box height: 61.950 [IQR 60.625-62.750], n=39
+   S2 pitch / word-box height: 1.029 [IQR 0.972-1.051], n=39
+   S2 word gap / word-box height: 0.458 [IQR 0.431-0.500], n=39
+   S3 pitch: 64.631 [IQR 62.734-68.250], n=24
+   S3 word gap: 28.500 [IQR 27.250-31.825], n=24
+   S3 word-box height: 62.300 [IQR 60.400-65.200], n=24
+   S3 pitch / word-box height: 1.040 [IQR 1.013-1.064], n=24
+   S3 word gap / word-box height: 0.460 [IQR 0.440-0.481], n=24
+   S1 herbal pitch: 79.775 [IQR 76.250-82.863], n=77
+   S1 herbal word gap: 29.100 [IQR 24.900-32.200], n=77
+   S1 herbal word-box height: 74.000 [IQR 69.950-77.800], n=77
+   S1 herbal pitch / word-box height: 1.070 [IQR 1.027-1.134], n=77
+   S1 herbal word gap / word-box height: 0.391 [IQR 0.344-0.444], n=77
+   S2 herbal pitch: 64.775 [IQR 61.862-66.762], n=19
+   S2 herbal word gap: 27.300 [IQR 27.000-30.450], n=19
+   S2 herbal word-box height: 62.300 [IQR 61.550-63.525], n=19
+   S2 herbal pitch / word-box height: 1.030 [IQR 0.961-1.054], n=19
+   S2 herbal word gap / word-box height: 0.439 [IQR 0.424-0.470], n=19

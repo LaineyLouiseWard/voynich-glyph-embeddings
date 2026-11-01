@@ -1,0 +1,10 @@
+Scribe 1: ink height px median 68.00 [IQR 62.00-74.00], n=1238; width/height median 0.66 [IQR 0.61-0.73], n=1238
+Scribe 2: ink height px median 56.00 [IQR 52.00-61.00], n=2312; width/height median 0.75 [IQR 0.68-0.81], n=2312
+Scribe 3: ink height px median 57.00 [IQR 52.00-63.00], n=2633; width/height median 0.72 [IQR 0.65-0.79], n=2633
+Scribe 4: ink height px median 62.00 [IQR 59.25-71.75], n=22; width/height median 0.70 [IQR 0.60-0.77], n=22
+Scribe 5: ink height px median 60.00 [IQR 54.00-65.00], n=181; width/height median 0.71 [IQR 0.66-0.78], n=181
+herbal pages, Scribe 1: ink height px median 68.00 [IQR 63.00-74.00], n=935
+herbal pages, Scribe 2: ink height px median 59.00 [IQR 54.00-66.00], n=578
+Scribe 1 page scans: height px median 3764.50 [IQR 3742.25-3770.00], n=104, range 3697-3864
+Scribe 2 page scans: height px median 3745.00 [IQR 3733.50-3769.00], n=43, range 3693-3890
+Scribe 3 page scans: height px median 3769.00 [IQR 3697.00-3787.00], n=29, range 3697-3811
