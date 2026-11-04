@@ -10,8 +10,11 @@ the rest Scribe 3), so its letters go by the line of their placed word (counted 
 holding their centre; where his page name is not in Zandbergen's file (foldout images such as 67r) or the 115r line is
 unknown, they keep his own label.
 Output: data/all_k.csv
-Usage: python scripts/build_all_k.py
+--letter iin builds data/all_iin.csv the same way from Timm's `iin` (no tilted list) and outputs/finding_iin/; its found
+letters get ids from 200001 up.
+Usage: python scripts/build_all_k.py [--letter k|iin]
 """
+import argparse
 import csv
 from collections import defaultdict
 from pathlib import Path
@@ -32,6 +35,9 @@ def iou(a, b):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--letter", default="k", choices=("k", "iin"))
+    L = parser.parse_args().letter
     hand = {r["page"]: r["davis_hand"] for r in csv.DictReader((ROOT / "config/zl_page_labels.csv").open())}
 
     def scribe(page, line, own=""):
@@ -46,15 +52,17 @@ def main():
     page_image = {w["page"]: w["iipimage"] for w in words}
     word_of = {(w["page"], w["index"]): w for w in words}
 
-    dropped = {r["annotation_id"] for r in csv.DictReader((ROOT / "config/dropped_tilted_k.csv").open())}
+    dropped = ({r["annotation_id"] for r in csv.DictReader((ROOT / "config/dropped_tilted_k.csv").open())}
+               if L == "k" else set())
     rows, timm_boxes = [], defaultdict(list)
     for g in csv.DictReader((ROOT / "data/glyphs.csv").open()):
-        if g["allograph"] != "k" or g["annotation_id"] in dropped:
+        if g["allograph"] != L or g["annotation_id"] in dropped:
             continue
         box = tuple(float(g[k]) for k in ("x0", "y0", "x1", "y1"))
         timm_boxes[g["iipimage"]].append(box)
         cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
-        inside = [w for w in by_image[g["iipimage"]] if w["kept"] == "1" and int(w["n_k"]) > 0
+        inside = [w for w in by_image[g["iipimage"]] if w["kept"] == "1"
+                  and (int(w["n_k"]) if L == "k" else F.COUNT[L](w["text"])) > 0
                   and float(w["x0"]) <= cx <= float(w["x1"]) and float(w["y0"]) <= cy <= float(w["y1"])]
         w = min(inside, key=lambda w: (float(w["x1"]) - float(w["x0"])) * (float(w["y1"]) - float(w["y0"])),
                 default=None)
@@ -67,11 +75,11 @@ def main():
 
     found, repeats = [], 0
     for fold in range(F.FOLDS):
-        path = F.OUT / f"fold{fold}" / "detections.csv"
+        path = F.out_dir(L) / f"fold{fold}" / "detections.csv"
         if not path.exists():
             continue
         for d in csv.DictReader(path.open()):
-            if float(d["score"]) < F.THRESHOLD or int(d["rank"]) >= int(d["n_k"]):
+            if float(d["score"]) < F.THRESHOLD or int(d["rank"]) >= int(d[f"n_{L}"]):
                 continue
             box = tuple(float(d[k]) for k in ("x0", "y0", "x1", "y1"))
             cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
@@ -85,14 +93,14 @@ def main():
                               word_index=d["word"], line=line, score=d["score"], fold=fold, rank=int(d["rank"])))
     found.sort(key=lambda r: (r["page"], int(r["word_index"]), r["rank"]))
     for i, r in enumerate(found):
-        r["letter_id"] = str(FIRST_ID + i)
+        r["letter_id"] = str((FIRST_ID if L == "k" else 200001) + i)
     rows += found
     assert len({r["letter_id"] for r in rows}) == len(rows), "letter ids must be unique"
-    with (ROOT / "data/all_k.csv").open("w", newline="") as f:
+    with (ROOT / f"data/all_{L}.csv").open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDS)
         writer.writeheader()
         writer.writerows(rows)
-    print(f"{len(rows) - len(found)} Timm k, {len(found)} found k, {repeats} finds dropped as repeats of Timm's letters")
+    print(f"{len(rows) - len(found)} Timm {L}, {len(found)} found {L}, {repeats} finds dropped as repeats of Timm's letters")
 
 
 if __name__ == "__main__":

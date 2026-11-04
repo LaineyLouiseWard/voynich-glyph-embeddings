@@ -1,0 +1,9 @@
+dinov3_unet_all_n, faint letters removed, 1591 letters
+Scribe 1 vs 2 (n=525, 371): 0.816, 95% interval [0.745, 0.871]; shuffled 0.485; p=0.005
+Scribe 1 vs 3 (n=525, 641): 0.825, 95% interval [0.739, 0.877]; shuffled 0.491; p=0.005
+Scribe 2 vs 3 (n=371, 641): 0.546, 95% interval [0.411, 0.647]; shuffled 0.495; p=0.159
+herbal pages only (folios 1-66): Scribe 1 vs 2 (n=449, 171): 0.771, 95% interval [0.645, 0.846]; shuffled 0.490; p=0.005
+herbal pages: Scribe 1 80, Scribe 2 20; letters per page: median 6
+medians: Scribe 1 -0.25, Scribe 2 0.29; SD of one letter within its page 0.29, of a typical page mean 0.12
+gap between medians = 4.6 typical page SDs
+pages in between (more than 2 of their own SDs from both medians): 6 (22r S1, 23v S1, 43v S2, 52v S1, 53v S1, 54v S1)

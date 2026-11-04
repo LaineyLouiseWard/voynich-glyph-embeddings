@@ -5,6 +5,9 @@ other. Composites add removed pieces from other letters, often slid until they t
 folio: every letter is predicted by a model that never saw its folio, and composite tests use held-out folios only.
 Inputs per pixel: ink darkness from the colour crop (2nd to 98th percentile stretch) and the SBB 2022 ink mask.
 Outputs: data/crops/unet_k/ (0 = ink, 255 = background, box size), outputs/cleaning/unet_k/letters.csv, summary.json.
+load_letters("iin") reads Timm's `iin` (sbb2022_raw_iin/, box_rgb_iin/, the rule in iin_clean.py in sbb2022_iin/); an
+`iin` is easy when the rule split no piece, since its `i` strokes are separate pieces; letters larger than the canvas
+are left out.
 Usage: python scripts/k_segmenter.py
 """
 import csv
@@ -29,18 +32,21 @@ TOUCH_SHARE, PLAIN_SHARE, MIN_DONOR = 0.7, 0.2, 15
 WEIGHTS = (0.2, 1.0, 1.0)  # background, target ink, other ink
 
 
-def load_letters():
+def load_letters(letter="k"):
     pages = {r["annotation_id"]: r["page"] for r in csv.DictReader((ROOT / "data/glyphs.csv").open())}
+    suffix = "" if letter == "k" else f"_{letter}"
     letters = []
-    for path in sorted((CROPS / "sbb2022_raw").glob("*.png"), key=lambda p: int(p.stem)):
-        grey = np.asarray(Image.open(CROPS / "box_rgb" / path.name).convert("L"), dtype=np.float32)
+    for path in sorted((CROPS / f"sbb2022_raw{suffix}").glob("*.png"), key=lambda p: int(p.stem)):
+        grey = np.asarray(Image.open(CROPS / f"box_rgb{suffix}" / path.name).convert("L"), dtype=np.float32)
         low, high = np.percentile(grey, [2, 98])
         dark = np.clip((high - grey) / max(high - low, 1), 0, 1)
         ink = np.asarray(Image.open(path).convert("L")) < 128
-        kept = np.asarray(Image.open(CROPS / "sbb2022_k" / path.name).convert("L")) < 128
+        kept = np.asarray(Image.open(CROPS / f"sbb2022_{letter}" / path.name).convert("L")) < 128
+        if letter != "k" and max(ink.shape) > SIZE:
+            continue
         parts = label(ink, connectivity=2)
         shared = set(np.unique(parts[kept])) & set(np.unique(parts[ink & ~kept])) - {0}
-        easy = kept.any() and not shared and label(kept, connectivity=2).max() == 1
+        easy = kept.any() and not shared and (letter != "k" or label(kept, connectivity=2).max() == 1)
         page = pages[path.stem]
         letters.append(dict(id=path.stem, folio=int(re.search(r"\d+", page).group()), dark=dark, ink=ink,
                             kept=kept, easy=bool(easy)))

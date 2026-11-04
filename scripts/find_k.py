@@ -16,7 +16,11 @@ same without keeping at most the EVA count per word, the same with the detection
 errors only), and per `k`-word the number of detections
 above the score threshold against the EVA count.
 Outputs: outputs/finding/fold<N>/ (detections.csv, timm_match.csv, summary.txt, gallery.png).
-Usage: python scripts/find_k.py [--fold 0] [--quick]
+--letter iin does the same for Timm's `iin` boxes, into outputs/finding_iin/: a word holds one `iin` for each `iin` not
+preceded by another `i` (`iiin` does not count); negatives hold no `n` at all (no `in`, `iin` or `iiin`), half of them,
+in place of a tall letter, with an `i` or with `r`, `l` or `m`, the letters that close a word after `a` as `n` does
+(`dar`, `dal`, `dam` beside `daiin`); words with `i` but no `n` are too few alone.
+Usage: python scripts/find_k.py [--fold 0] [--quick] [--letter k|iin]
 """
 import argparse
 import csv
@@ -51,12 +55,26 @@ def n_k(text):
     return text.count("k") - text.count("ckh")
 
 
-def load_words():
+def n_iin(text):
+    return len(re.findall(r"(?<!i)iin", text))
+
+
+COUNT = {"k": n_k, "iin": n_iin}
+ABSENT = {"k": lambda t: n_k(t) == 0, "iin": lambda t: "n" not in t}  # negatives hold none of the letter
+CONFUSABLE = {"k": r"[tpf]", "iin": r"[irlm]"}  # half the negatives hold this
+
+
+def out_dir(letter):
+    return OUT if letter == "k" else Path(f"{OUT}_{letter}")
+
+
+def load_words(letter="k"):
+    """Kept words; w["n"] is the number of the letter in the word's EVA."""
     words = [r for r in csv.DictReader((ROOT / "data/word_boxes/aligned.csv").open()) if r["kept"] == "1"]
     for w in words:
         for key in ("x0", "y0", "x1", "y1"):
             w[key] = float(w[key])
-        w["n_k"] = int(w["n_k"])
+        w["n"] = int(w["n_k"]) if letter == "k" else COUNT[letter](w["text"])
     return words
 
 
@@ -73,11 +91,11 @@ def crop_word(page, word):
     return np.asarray(crop), paper, (x0, y0), scale
 
 
-def touches_k_word(word, page_words):
-    """True if the padded crop of `word` overlaps any other word whose EVA holds `k`."""
+def touches_k_word(word, page_words, letter="k"):
+    """True if the padded crop of `word` overlaps any other word whose EVA holds the letter (for `iin`, any `n`)."""
     h = word["y1"] - word["y0"]
     c = (word["x0"] - PAD * h, word["y0"] - PAD * h, word["x1"] + PAD * h, word["y1"] + PAD * h)
-    return any(o is not word and o["n_k"] > 0 and min(o["x1"], c[2]) > max(o["x0"], c[0])
+    return any(o is not word and not ABSENT[letter](o["text"]) and min(o["x1"], c[2]) > max(o["x0"], c[0])
                and min(o["y1"], c[3]) > max(o["y0"], c[1]) for o in page_words)
 
 
@@ -105,26 +123,28 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--fold", type=int, default=0)
     parser.add_argument("--quick", action="store_true", help="test run: 40 positives, 1 epoch, 100 held-out words")
+    parser.add_argument("--letter", default="k", choices=("k", "iin"))
     args = parser.parse_args()
+    L = args.letter
     Image.MAX_IMAGE_PIXELS = None
     rng = np.random.default_rng(SEED)
     torch.manual_seed(SEED)
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    out = OUT / (f"fold{args.fold}" + ("_quick" if args.quick else ""))
+    out = out_dir(L) / (f"fold{args.fold}" + ("_quick" if args.quick else ""))
     out.mkdir(parents=True, exist_ok=True)
 
     start_time = time.perf_counter()
-    words = load_words()
+    words = load_words(L)
     by_image = defaultdict(list)
     for w in words:
         by_image[w["iipimage"]].append(w)
     timm = [g for g in csv.DictReader((ROOT / "data/glyphs.csv").open())
-            if g["allograph"] == "k" and g["iipimage"] in by_image]
+            if g["allograph"] == L and g["iipimage"] in by_image]
     for g in timm:
         for key in ("x0", "y0", "x1", "y1"):
             g[key] = float(g[key])
         cx, cy = (g["x0"] + g["x1"]) / 2, (g["y0"] + g["y1"]) / 2
-        inside = [w for w in by_image[g["iipimage"]] if w["n_k"] > 0
+        inside = [w for w in by_image[g["iipimage"]] if w["n"] > 0
                   and w["x0"] <= cx <= w["x1"] and w["y0"] <= cy <= w["y1"]]
         g["word"] = min(inside, key=lambda w: (w["x1"] - w["x0"]) * (w["y1"] - w["y0"])) if inside else None
 
@@ -135,11 +155,11 @@ def main():
     print(f"Fold {args.fold}: {len(pages) - len(test_pages)} training pages, {len(test_pages)} held-out pages")
 
     # training crops
-    positives = [g for g in timm if g["word"] is not None and g["word"]["n_k"] == 1 and g["word"]["page"] not in test_pages]
-    clean = [w for w in words if w["n_k"] == 0 and w["page"] not in test_pages
-             and not touches_k_word(w, by_image[w["iipimage"]])]
-    tall = [w for w in clean if re.search(r"[tpf]", w["text"])]
-    plain = [w for w in clean if not re.search(r"[tpf]", w["text"])]
+    positives = [g for g in timm if g["word"] is not None and g["word"]["n"] == 1 and g["word"]["page"] not in test_pages]
+    clean = [w for w in words if ABSENT[L](w["text"]) and w["page"] not in test_pages
+             and not touches_k_word(w, by_image[w["iipimage"]], L)]
+    tall = [w for w in clean if re.search(CONFUSABLE[L], w["text"])]
+    plain = [w for w in clean if not re.search(CONFUSABLE[L], w["text"])]
     if args.quick:
         positives = [positives[i] for i in sorted(rng.choice(len(positives), min(40, len(positives)), replace=False))]
     n_neg = NEG_PER_POS * len(positives)
@@ -161,8 +181,8 @@ def main():
                     boxes = torch.tensor([[(g["x0"] - x0) * scale, (g["y0"] - y0) * scale,
                                            (g["x1"] - x0) * scale, (g["y1"] - y0) * scale]])
                 train.append((crop, paper, boxes))
-    print(f"Training crops: {len(positives)} with a Timm k, {len(negatives)} without k "
-          f"({n_neg // 2} with t, p or f); loaded in {time.perf_counter() - start_time:.0f} s", flush=True)
+    print(f"Training crops: {len(positives)} with a Timm {L}, {len(negatives)} without {L} "
+          f"({n_neg // 2} with {dict(k='t, p or f', iin='i, r, l or m')[L]}); loaded in {time.perf_counter() - start_time:.0f} s", flush=True)
 
     net = model(device)
     params = [p for p in net.parameters() if p.requires_grad]
@@ -190,10 +210,10 @@ def main():
         sched.step()
         print(f"epoch {epoch + 1}: loss {total / len(train):.3f}, at {time.perf_counter() - start_time:.0f} s", flush=True)
 
-    # held-out k-words
+    # held-out words holding the letter
     net.eval()
     detections, gallery = [], []
-    test_words = [w for w in words if w["page"] in test_pages and w["n_k"] > 0]
+    test_words = [w for w in words if w["page"] in test_pages and w["n"] > 0]
     if args.quick:
         test_words = [test_words[i] for i in sorted(rng.choice(len(test_words), min(100, len(test_words)), replace=False))]
     found = {}
@@ -212,10 +232,10 @@ def main():
                             kept.append((float(score), bx))
                     found[id(w)] = kept
                     for rank, (score, bx) in enumerate(kept):
-                        detections.append(dict(page=w["page"], word=w["index"], text=w["text"], n_k=w["n_k"],
+                        detections.append(dict(page=w["page"], word=w["index"], text=w["text"], **{f"n_{L}": w["n"]},
                                                rank=rank, score=round(score, 4),
                                                x0=round(bx[0]), y0=round(bx[1]), x1=round(bx[2]), y1=round(bx[3])))
-                    above = [d for d in kept if d[0] >= THRESHOLD][:w["n_k"]]
+                    above = [d for d in kept if d[0] >= THRESHOLD][:w["n"]]
                     if above and len(gallery) < 2000:
                         gallery.append((path, above[0][1], w["text"]))
 
@@ -230,9 +250,9 @@ def main():
     for g in held:
         t = (g["x0"], g["y0"], g["x1"], g["y1"])
         every = [c for c in found.get(id(g["word"]), []) if c[0] >= THRESHOLD] if g["word"] is not None else []
-        cands = every[:g["word"]["n_k"]] if every else []
+        cands = every[:g["word"]["n"]] if every else []
         best = max(cands, key=lambda c: iou(t, c[1]), default=None)
-        row = dict(annotation_id=g["annotation_id"], page=g["page"], in_k_word=g["word"] is not None,
+        row = dict(annotation_id=g["annotation_id"], page=g["page"], **{f"in_{L}_word": g["word"] is not None},
                    iou=0.0, iou_centred=0.0, score=0.0,
                    iou_no_count_rule=round(max((iou(t, c[1]) for c in every), default=0.0), 3))
         if best is not None:
@@ -251,27 +271,27 @@ def main():
 
     ious = np.array([m["iou"] for m in matches])
     centred = np.array([m["iou_centred"] for m in matches])
-    in_word = np.array([m["in_k_word"] for m in matches])
+    in_word = np.array([m[f"in_{L}_word"] for m in matches])
     agree = defaultdict(int)
     for w in test_words:
         n = len([d for d in found[id(w)] if d[0] >= THRESHOLD])
-        agree["equal" if n == w["n_k"] else "fewer" if n < w["n_k"] else "more"] += 1
-    lines = [f"Fold {args.fold}: {len(test_pages)} held-out pages, {len(held)} Timm k on them, "
-             f"{in_word.sum()} with their centre in a k-word",
-             f"Timm k found at IoU >= 0.5: {(ious >= 0.5).sum()} of {len(held)}; IoU >= 0.75: {(ious >= 0.75).sum()}",
+        agree["equal" if n == w["n"] else "fewer" if n < w["n"] else "more"] += 1
+    lines = [f"Fold {args.fold}: {len(test_pages)} held-out pages, {len(held)} Timm {L} on them, "
+             f"{in_word.sum()} with their centre in a {L}-word",
+             f"Timm {L} found at IoU >= 0.5: {(ious >= 0.5).sum()} of {len(held)}; IoU >= 0.75: {(ious >= 0.75).sum()}",
              f"Without the at-most-EVA-count rule: IoU >= 0.5 {(np.array([m['iou_no_count_rule'] for m in matches]) >= 0.5).sum()}, "
              f">= 0.75 {(np.array([m['iou_no_count_rule'] for m in matches]) >= 0.75).sum()}",
              f"Same, detection moved onto Timm's centre: IoU >= 0.5 {(centred >= 0.5).sum()}, >= 0.75 {(centred >= 0.75).sum()}",
              f"Median IoU of found: {np.median(ious[ious > 0]) if (ious > 0).any() else 0:.3f}",
-             f"Held-out k-words: {len(test_words)}; detections above {THRESHOLD} equal to EVA count: {agree['equal']}, "
+             f"Held-out {L}-words: {len(test_words)}; detections above {THRESHOLD} equal to EVA count: {agree['equal']}, "
              f"fewer: {agree['fewer']}, more: {agree['more']}",
              f"Detections above {THRESHOLD} kept (at most EVA count per word): "
-             f"{sum(min(len([d for d in found[id(w)] if d[0] >= THRESHOLD]), w['n_k']) for w in test_words)}"]
+             f"{sum(min(len([d for d in found[id(w)] if d[0] >= THRESHOLD]), w['n']) for w in test_words)}"]
     lines.append(f"Run time: {time.perf_counter() - start_time:.0f} s")
     (out / "summary.txt").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
 
-    # gallery: a seeded random 48 found k on held-out pages, with 30 px context
+    # gallery: a seeded random 48 found letters on held-out pages, with 30 px context
     pick = [gallery[i] for i in sorted(rng.choice(len(gallery), min(48, len(gallery)), replace=False))]
     tiles = []
     for path, b, text in pick:

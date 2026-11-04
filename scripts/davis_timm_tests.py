@@ -5,9 +5,13 @@
 2. Crossbar or text type: classifier trained on all Scribe 1 and 2 `k`, applied to Scribes 3, 4 and 5.
 Each test runs on all letters and without faint letters (k ink share in the bottom 10% of the U-Net masks).
 Stems ending in _all (dinov3_unet_all, hinge_unet_all) use every k in data/all_k.csv, cleaned in data/crops/unet_all_k/.
+Stems ending in _all_iin and _all_n use data/all_iin.csv; faint letters are the bottom 10% of the cleaned `iin`
+(data/crops/unet_box_iin/) for both; letters whose cleaned `iin` ink touches the box's top or left edge are
+dropped (KEEP_EDGE_INK=1 keeps them, for the sensitivity run); _all_n keeps the letters with a cut `n` (data/crops/unet_box_n/).
 Usage: python scripts/davis_timm_tests.py [stem]   (default dinov3_unet)
 """
 import csv
+import os
 import sys
 
 import numpy as np
@@ -21,13 +25,24 @@ from classifier_test import (ROOT, bifolium, embeddings_for, folio, held_out, pa
 FAINT_SHARE = 10
 
 
-def letters(every=False):
+def stem_letter(stem):
+    """(every, letter) for a stem: _all is every k, _all_iin and _all_n every iin."""
+    if stem.endswith("_all"):
+        return True, "k"
+    for letter in ("iin", "n"):
+        if stem.endswith(f"_all_{letter}"):
+            return True, letter
+    return False, "k"
+
+
+def letters(every=False, letter="k"):
     """Timm's upright k, or with every=True each k in data/all_k.csv (Davis scribe as both scribe and hand)."""
     language = {r["page"]: r["language"] for r in csv.DictReader((ROOT / "config/zl_page_labels.csv").open())}
     if every:
+        table = "all_k" if letter == "k" else "all_iin"
         k = [dict(r, annotation_id=r["letter_id"], scribe=r["davis_scribe"], hand=r["davis_scribe"])
-             for r in csv.DictReader((ROOT / "data/all_k.csv").open())]
-        crops = "unet_all_k"
+             for r in csv.DictReader((ROOT / f"data/{table}.csv").open())]
+        crops = "unet_all_k" if letter == "k" else "unet_box_iin"
     else:
         dropped = {r["annotation_id"] for r in csv.DictReader((ROOT / "config/dropped_tilted_k.csv").open())}
         k = [r for r in csv.DictReader((ROOT / "data/glyphs.csv").open())
@@ -39,7 +54,17 @@ def letters(every=False):
     for r, flag in zip(k, faint):
         r["language"] = language.get(r["page"].lstrip("f"), "")
         r["faint"] = bool(flag)
+    if letter in ("iin", "n") and not os.environ.get("KEEP_EDGE_INK"):
+        k = [r for r in k if not touches_top_or_left(ROOT / "data/crops" / crops / f"{r['annotation_id']}.png")]
+    if letter == "n":
+        k = [r for r in k if (ROOT / "data/crops/unet_box_n" / f"{r['annotation_id']}.png").exists()]
     return k
+
+
+def touches_top_or_left(path):
+    """Cleaned ink on the box's top row or left column: ink from the line above or the letter before was left in."""
+    ink = np.asarray(Image.open(path).convert("L")) < 128
+    return bool(ink[0].any() or ink[:, 0].any())
 
 
 def text_type_fixed(k, x, label):
@@ -82,7 +107,7 @@ def crossbar_or_text(k, x, label):
 
 def main():
     stem = sys.argv[1] if len(sys.argv) > 1 else "dinov3_unet"
-    k = letters(stem.endswith("_all"))
+    k = letters(*stem_letter(stem))
     x = embeddings_for(stem, k)
     usable = np.flatnonzero(np.linalg.norm(x, axis=1) > 0)  # Hinge is all zero when cleaning left no contour
     empty = len(k) - len(usable)

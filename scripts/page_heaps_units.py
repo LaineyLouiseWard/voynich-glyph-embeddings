@@ -2,7 +2,7 @@
 embeddings, faint letters removed, with the unit's sheet (Zandbergen $B, as in the classifier tests) and Currier language.
 
 Output: outputs/unsupervised_classification/units_<stem>.csv (page, scribe, language, sheet, letters, e1 ... eD).
-Usage: python scripts/page_heaps_units.py [stem]   (default dinov3_unet_all; stems ending _all use data/all_k.csv)
+Usage: python scripts/page_heaps_units.py [stem]   (default dinov3_unet_all; stems ending _all use data/all_k.csv, _all_iin and _all_n data/all_iin.csv)
 """
 import csv
 import sys
@@ -10,12 +10,12 @@ import sys
 import numpy as np
 
 from classifier_test import ROOT, bifolium, embeddings_for, folio
-from davis_timm_tests import letters
+from davis_timm_tests import letters, stem_letter
 
 
 def main():
     stem = sys.argv[1] if len(sys.argv) > 1 else "dinov3_unet_all"
-    k = [r for r in letters(stem.endswith("_all")) if not r["faint"]]
+    k = [r for r in letters(*stem_letter(stem)) if not r["faint"]]
     x = embeddings_for(stem, k)
     x = x / np.linalg.norm(x, axis=1, keepdims=True)
     units = {}

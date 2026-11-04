@@ -1,0 +1,20 @@
+dinov3_unet_all_iin: 190 page-hand units, 51 sheets, 1997 letters
+BIC: 4 components (VEE); after ridgeline-ratio merge (cutoff 0.2): 1 groups, sizes 190
+mean sheet-bootstrap Jaccard per group: 0.98
+ANSWER: no separate heaps at this resolution (means less than about 4.3 page SDs apart)
+draws: 1000 of 1000 fitted; groups per draw: 1: 77%, 2: 11%, 3: 4%, 4: 5%, 5: 3%, 6: 1%, 7: 0%
+ridgeline ratios between merged groups:
+     [,1] [,2] [,3] [,4]
+[1,] 0.00    0    0 0.43
+[2,] 0.00    0    0 0.00
+[3,] 0.00    0    0 0.00
+[4,] 0.43    0    0 0.00
+description only, adjusted Rand index: Davis scribe 0.000; Currier A/B 0.000
+before the merge, pages per BIC component by Davis scribe:
+         scribe
+component  1  2  3  4  5
+        1 84  2  2  1  4
+        2  4 40 25  3  1
+        3  9  2  3  7  1
+        4  2  0  0  0  0
+adjusted Rand index of the components: Davis scribe 0.508; Currier A/B 0.616

@@ -1,6 +1,7 @@
 data/*
 !data/glyphs.csv
 !data/all_k.csv
+!data/all_iin.csv
 !data/word_boxes/
 !data/crops/
 data/crops/*
@@ -8,12 +9,18 @@ data/crops/*
 !data/crops/unet/
 !data/crops/unet_all_k/
 !data/crops/unet_all/
+!data/crops/unet_box_iin/
+!data/crops/unet_box_n/
+!data/crops/unet_all_iin/
+!data/crops/unet_all_n/
 !data/embeddings/
 data/embeddings/*
 !data/embeddings/*_unet.npy
 !data/embeddings/*_unet_ids.csv
 !data/embeddings/*_unet_all.npy
 !data/embeddings/*_unet_all_ids.csv
+!data/embeddings/dinov3_unet_all_iin*
+!data/embeddings/dinov3_unet_all_n*
 __pycache__/
 *.py[cod]
 .venv/

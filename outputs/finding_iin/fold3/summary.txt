@@ -1,0 +1,8 @@
+Fold 3: 33 held-out pages, 131 Timm iin on them, 128 with their centre in a iin-word
+Timm iin found at IoU >= 0.5: 126 of 131; IoU >= 0.75: 112
+Without the at-most-EVA-count rule: IoU >= 0.5 126, >= 0.75 112
+Same, detection moved onto Timm's centre: IoU >= 0.5 126, >= 0.75 119
+Median IoU of found: 0.838
+Held-out iin-words: 639; detections above 0.5 equal to EVA count: 575, fewer: 62, more: 2
+Detections above 0.5 kept (at most EVA count per word): 577
+Run time: 886 s

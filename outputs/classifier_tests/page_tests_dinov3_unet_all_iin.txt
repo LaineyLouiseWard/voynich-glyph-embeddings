@@ -1,0 +1,4 @@
+dinov3_unet_all_iin, faint letters removed
+f115r lines 1 to 12 (Davis: Scribe 2): 0 of 2 assigned to Scribe 2 (0.00); trained on 1130 Scribe 2 and 3 letters
+f115r lines 13 on (Davis: Scribe 3): 9 of 17 assigned to Scribe 2 (0.53); trained on 1130 Scribe 2 and 3 letters
+ff58r/58v (Currier A, Davis: Scribe 3): 27 of 41 assigned to Scribe 3 (0.66); trained on 1448 Scribe 1 and 3 letters

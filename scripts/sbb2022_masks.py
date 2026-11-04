@@ -5,7 +5,8 @@ region around each box, kept inside the page. Outputs, named by annotation ID:
 data/crops/sbb2022_raw/ (0 = ink, 255 = background, outside the polygon set to background) and
 data/crops/box_rgb/ (the colour box crop, for review).
 --workers N runs N copies of SBB side by side, each on its own pages; the masks are the same.
-Usage: python scripts/sbb2022_masks.py [--limit N] [--workers N]
+--letter iin does the same for Timm's `iin` boxes, into sbb2022_raw_iin/ and box_rgb_iin/ (no tilted list).
+Usage: python scripts/sbb2022_masks.py [--limit N] [--workers N] [--letter k|iin]
 """
 import argparse
 import csv
@@ -83,15 +84,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--letter", default="k", choices=("k", "iin"))
     args = parser.parse_args()
-    dropped = {r["annotation_id"] for r in csv.DictReader((ROOT / "config/dropped_tilted_k.csv").open())}
+    raw, rgb = (RAW, RGB) if args.letter == "k" else (Path(f"{RAW}_{args.letter}"), Path(f"{RGB}_{args.letter}"))
+    dropped = ({r["annotation_id"] for r in csv.DictReader((ROOT / "config/dropped_tilted_k.csv").open())}
+               if args.letter == "k" else set())
     rows = [r for r in csv.DictReader((ROOT / "data/glyphs.csv").open())
-            if r["allograph"] == "k" and r["annotation_id"] not in dropped]
+            if r["allograph"] == args.letter and r["annotation_id"] not in dropped]
     rows = rows[:args.limit] if args.limit else rows
     assert len({r["annotation_id"] for r in rows}) == len(rows), "repeated annotation IDs would share one output file"
     annotations = {r["annotation_id"]: r for r in map(lambda a: {k: str(v) for k, v in a.items()}, glyph_table())}
-    RAW.mkdir(parents=True, exist_ok=True)
-    RGB.mkdir(parents=True, exist_ok=True)
+    raw.mkdir(parents=True, exist_ok=True)
+    rgb.mkdir(parents=True, exist_ok=True)
     by_page = {}
     for r in rows:
         a = annotations[r["annotation_id"]]
@@ -99,13 +103,13 @@ def main():
     pages = list(by_page.items())
     if args.workers > 1:
         with get_context("spawn").Pool(args.workers) as pool:
-            done = sum(pool.starmap(binarise_pages, [(pages[i::args.workers], RAW, RGB)
+            done = sum(pool.starmap(binarise_pages, [(pages[i::args.workers], raw, rgb)
                                                      for i in range(args.workers)]))
     else:
-        done = binarise_pages(pages, RAW, RGB)
+        done = binarise_pages(pages, raw, rgb)
     commit = subprocess.run(["git", "-C", str(SOURCE.parents[1]), "rev-parse", "HEAD"],
                             capture_output=True, text=True).stdout.strip()
-    (RAW / "settings.json").write_text(json.dumps(dict(
+    (raw / "settings.json").write_text(json.dumps(dict(
         checkpoint="2022-08-16", weights="https://huggingface.co/SBB/sbb_binarization",
         code="https://github.com/qurator-spk/sbb_binarization", code_commit=commit,
         region=REGION, glyphs=done, polygon="outside set to background"), indent=2) + "\n")

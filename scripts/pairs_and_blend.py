@@ -5,6 +5,7 @@ Gap or blend: each letter's held-out log-odds of Scribe 2, averaged per page. Th
 spread of single letters within their page divided by the square root of that page's number of letters.
 Usage: python scripts/pairs_and_blend.py [stem]   (default dinov3_unet)
 """
+import os
 import sys
 
 import numpy as np
@@ -12,7 +13,7 @@ from sklearn.model_selection import GroupKFold
 
 from classifier_test import (ROOT, bifolium, embeddings_for, folio, held_out, page_weights, score, sheet_interval,
                              shuffled_scores)
-from davis_timm_tests import letters
+from davis_timm_tests import letters, stem_letter
 
 SUFFIX = ""
 
@@ -72,8 +73,8 @@ def blend(k, x):
 def main():
     global SUFFIX
     stem = sys.argv[1] if len(sys.argv) > 1 else "dinov3_unet"
-    SUFFIX = "" if stem == "dinov3_unet" else f"_{stem}"
-    k = [r for r in letters(stem.endswith("_all")) if not r["faint"]]
+    SUFFIX = ("" if stem == "dinov3_unet" else f"_{stem}") + ("_edge_kept" if os.environ.get("KEEP_EDGE_INK") else "")
+    k = [r for r in letters(*stem_letter(stem)) if not r["faint"]]
     x = embeddings_for(stem, k)
     x = x / np.linalg.norm(x, axis=1, keepdims=True)
     lines = [f"{stem}, faint letters removed, {len(k)} letters"]

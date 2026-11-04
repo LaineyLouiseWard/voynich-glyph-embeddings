@@ -1,4 +1,5 @@
-"""Embed crops with frozen DINO tokens or pixel PCA. Variant unet_all takes its letters from data/all_k.csv."""
+"""Embed crops with frozen DINO tokens or pixel PCA. Variant unet_all takes its letters from data/all_k.csv, unet_all_iin and
+unet_all_n from data/all_iin.csv."""
 import argparse
 import csv
 from pathlib import Path
@@ -60,10 +61,13 @@ def pixel_embeddings(ids, variant):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("model", choices=("dinov2", "dinov3", "dinov3patch", "pixel"))
-    parser.add_argument("variant", choices=("grey", "binary", "clean", "unet", "sbb2022", "unet_all"))
+    parser.add_argument("variant", choices=("grey", "binary", "clean", "unet", "sbb2022", "unet_all",
+                                                 "unet_all_iin", "unet_all_n"))
     parser.add_argument("--device", default="cpu")
     args = parser.parse_args()
     table, key = ("data/all_k.csv", "letter_id") if args.variant == "unet_all" else ("data/glyphs.csv", "annotation_id")
+    if args.variant in ("unet_all_iin", "unet_all_n"):
+        table, key = "data/all_iin.csv", "letter_id"
     with (ROOT / table).open(newline="", encoding="utf-8") as source:
         ids = [row[key] for row in csv.DictReader(source)
                if (ROOT / "data/crops" / args.variant / f"{row[key]}.png").exists()]

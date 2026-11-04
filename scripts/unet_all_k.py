@@ -8,8 +8,12 @@ box crop (2nd to 98th percentile stretch) and the SBB ink mask: Timm's letters f
 fill his boxes for all 425, so these are box-only too), found letters from sbb2022_found.py. Letters larger than the
 canvas are shrunk to fit and the mask is enlarged back.
 Outputs: data/crops/unet_all_k/<letter_id>.png (0 = ink, 255 = background, box size), outputs/cleaning/unet_all_k/letters.csv.
-Usage: python scripts/unet_all_k.py
+--letter iin: models trained on Timm's `iin` (k_segmenter.load_letters("iin")) and saved to data/models/unet_iin/, with
+their scores on held-out composites printed; letters from data/all_iin.csv and the `_iin` SBB folders; outputs
+data/crops/unet_box_iin/ and outputs/cleaning/unet_all_iin/.
+Usage: python scripts/unet_all_k.py [--letter k|iin]
 """
+import argparse
 import csv
 import re
 from pathlib import Path
@@ -27,27 +31,32 @@ CROPS = ROOT / "data/crops"
 OUT_MASKS, OUT = ROOT / "data/crops/unet_all_k", ROOT / "outputs/cleaning/unet_all_k"
 
 
-def fold_models(device):
+def fold_models(device, letter="k"):
     """The five k_segmenter fold models and the folios each one held out."""
     rng = np.random.default_rng(K.SEED)
-    letters = K.load_letters()
+    letters = K.load_letters(letter)
     folds = list(GroupKFold(n_splits=K.FOLDS).split(letters, groups=[l["folio"] for l in letters]))
-    MODELS.mkdir(parents=True, exist_ok=True)
+    models_dir = MODELS if letter == "k" else ROOT / f"data/models/unet_{letter}"
+    models_dir.mkdir(parents=True, exist_ok=True)
     models, held_out = [], {}
     for fold, (train_index, test_index) in enumerate(folds):
         train_letters = [letters[i] for i in train_index]
         test_letters = [letters[i] for i in test_index]
-        path = MODELS / f"fold{fold}.pt"
+        path = models_dir / f"fold{fold}.pt"
         # composites are drawn every time, so the random stream matches k_segmenter.py for every fold
         x, y = K.composites(train_letters, K.donors(train_letters), K.COMPOSITES, rng)
-        if path.exists():
+        trained = not path.exists()
+        if not trained:
             model = K.UNet().to(device)
             model.load_state_dict(torch.load(path, map_location=device))
             model.eval()
         else:
             model = K.train(x, y, device)
             torch.save(model.state_dict(), path)
-        K.composites(test_letters, K.donors(test_letters), 500, rng)
+        test_x, test_y = K.composites(test_letters, K.donors(test_letters), 500, rng)
+        if trained:
+            print(dict(fold=fold, train_letters=len(train_letters), train_easy=sum(l["easy"] for l in train_letters),
+                       **K.composite_scores(K.predict(model, test_x, device), test_y)), flush=True)
         models.append(model)
         for letter in test_letters:
             held_out[letter["folio"]] = fold
@@ -55,12 +64,14 @@ def fold_models(device):
     return models, held_out
 
 
-def inputs(r):
+def inputs(r, letter="k"):
     """Darkness and SBB ink for one all_k row: Timm's from sbb2022_masks.py, found from sbb2022_found.py."""
+    suffix = "" if letter == "k" else f"_{letter}"
     if r["source"] == "timm":
-        raw, rgb, name = CROPS / "sbb2022_raw", CROPS / "box_rgb", r["letter_id"]
+        raw, rgb, name = CROPS / f"sbb2022_raw{suffix}", CROPS / f"box_rgb{suffix}", r["letter_id"]
     else:
-        raw, rgb, name = CROPS / "sbb2022_found_raw", CROPS / "box_rgb_found", f"{r['page']}_{r['word_index']}_{r['rank']}"
+        raw, rgb, name = (CROPS / f"sbb2022_found_raw{suffix}", CROPS / f"box_rgb_found{suffix}",
+                          f"{r['page']}_{r['word_index']}_{r['rank']}")
     grey = np.asarray(Image.open(rgb / f"{name}.png").convert("L"), dtype=np.float32)
     low, high = np.percentile(grey, [2, 98])
     dark = np.clip((high - grey) / max(high - low, 1), 0, 1)
@@ -69,14 +80,18 @@ def inputs(r):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--letter", default="k", choices=("k", "iin"))
+    L = parser.parse_args().letter
+    out_masks, out = (OUT_MASKS, OUT) if L == "k" else (CROPS / f"unet_box_{L}", ROOT / f"outputs/cleaning/unet_all_{L}")
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    models, held_out = fold_models(device)
-    rows = list(csv.DictReader((ROOT / "data/all_k.csv").open()))
-    OUT_MASKS.mkdir(parents=True, exist_ok=True)
-    OUT.mkdir(parents=True, exist_ok=True)
+    models, held_out = fold_models(device, L)
+    rows = list(csv.DictReader((ROOT / f"data/all_{L}.csv").open()))
+    out_masks.mkdir(parents=True, exist_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
     out_rows = []
     for r in rows:
-        dark, ink = inputs(r)
+        dark, ink = inputs(r, L)
         h, w = ink.shape
         scale = min(1.0, K.SIZE / max(h, w))
         if scale < 1:
@@ -96,12 +111,12 @@ def main():
         if scale < 1:
             k = np.asarray(Image.fromarray(k).resize((w, h), Image.Resampling.NEAREST))
             conf = np.asarray(Image.fromarray(conf).resize((w, h), Image.Resampling.NEAREST))
-        Image.fromarray(np.where(k, 0, 255).astype(np.uint8)).save(OUT_MASKS / f"{r['letter_id']}.png")
+        Image.fromarray(np.where(k, 0, 255).astype(np.uint8)).save(out_masks / f"{r['letter_id']}.png")
         out_rows.append(dict(letter_id=r["letter_id"], source=r["source"], fold=fold, shrunk=int(scale < 1),
                              box_pixels=h * w, k_pixels=int(k.sum()), k_outside_sbb_ink=int((k & ~ink).sum()),
                              unsure_ink_share=round(float((conf[ink] < 0.7).mean()) if ink.any() else 0, 4),
                              mean_confidence_k=round(float(conf[k].mean()) if k.any() else 0, 4)))
-    with (OUT / "letters.csv").open("w", newline="") as f:
+    with (out / "letters.csv").open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(out_rows[0]))
         writer.writeheader()
         writer.writerows(out_rows)
